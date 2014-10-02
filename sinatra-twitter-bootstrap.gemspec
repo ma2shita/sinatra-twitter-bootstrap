@@ -12,15 +12,7 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     "lib/sinatra/twitter-bootstrap.rb",
-    "lib/sinatra/helpers/haml_helpers.rb",
-    "lib/sinatra/assets/bootstrap-responsive.min.css",
-    "lib/sinatra/assets/bootstrap.min.css",
-    "lib/sinatra/assets/bootstrap.min.js",
-    "lib/sinatra/assets/html5.js",
-    "lib/sinatra/assets/jquery.min.js",
-    "lib/sinatra/assets/glyphicons-halflings.png",
-    "lib/sinatra/assets/glyphicons-halflings-white.png",
-    "lib/sinatra/twitter-bootstrap.rb"
+    "lib/sinatra/helpers/haml_helpers.rb"
   ]
   s.homepage = "http://github.com/mifo/sinatra-twitter-bootstrap"
   s.require_paths = ["lib"]
