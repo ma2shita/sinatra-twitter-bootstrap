@@ -1,5 +1,5 @@
-Sinatra Bootstrap (css+js+helpers)
-=================
+Sinatra Bootstrap (css+js and other)
+==================================
 
 What?
 --------
@@ -19,7 +19,7 @@ How?
 
 Is simple. Add this line to your Gemfile:
 
-    gem 'sinatra-twitter-bootstrap', :require => 'sinatra/twitter-bootstrap'
+    gem 'sinatra-twitter-bootstrap'
     
 or without bundler, `gem install sinatra-twitter-bootstrap` and then: 
 
@@ -28,6 +28,7 @@ or without bundler, `gem install sinatra-twitter-bootstrap` and then:
 Then in your Sinatra application/class you can do:
 
     class TestApp < Sinatra::Base
+      set :bootstrap_version, "3.3.1"
       register Sinatra::Twitter::Bootstrap::Assets
     end
 
