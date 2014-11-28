@@ -28,6 +28,14 @@ module Sinatra
                      :ttf => ['glyphicons-halflings-regular.ttf'],
                      :woff => ['glyphicons-halflings-regular.woff'],
                    },
+                   "3.3.1" =>
+                   { :css => ['bootstrap.min.css', 'bootstrap-theme.min.css'],
+                     :js =>  ['jquery-1.11.1.min.js', 'bootstrap.min.js', 'html5shiv.min.js'],
+                     :eot => ['glyphicons-halflings-regular.eot'],
+                     :svg => ['glyphicons-halflings-regular.svg'],
+                     :ttf => ['glyphicons-halflings-regular.ttf'],
+                     :woff => ['glyphicons-halflings-regular.woff'],
+                   },
                  }
 
         def self.generate_bootstrap_asset_routes(app)
