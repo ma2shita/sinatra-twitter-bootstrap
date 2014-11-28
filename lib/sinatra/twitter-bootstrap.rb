@@ -6,8 +6,9 @@ module Sinatra
     module Bootstrap
 
       module Assets
+        extend self
 
-        def self.assets
+        def assets
           asset_confs = Dir.glob(File.join(File.expand_path(File.dirname(__FILE__)), "assets", "*", "config.yaml"))
           asset_confs.inject({}) do |h, conf_path|
             name = conf_path.split(File::Separator)[-2]
@@ -16,7 +17,7 @@ module Sinatra
           end
         end
           
-        def self.generate_bootstrap_asset_routes(app)
+        def generate_bootstrap_asset_routes(app)
           version = app.settings.bootstrap_version
           assets[version].each do |kind, files|
             files.each do |file|
@@ -38,7 +39,7 @@ module Sinatra
           end
         end
 
-        def self.registered(app)
+        def registered(app)
           @bootstrap_version = begin
                                  app.settings.bootstrap_version
                                rescue
@@ -50,7 +51,7 @@ module Sinatra
           app.helpers HAMLHelper
         end
 
-        def self.bootstrap_version
+        def bootstrap_version
           @bootstrap_version
         end
       end
@@ -70,9 +71,10 @@ module Sinatra
           output = ''
           version = Assets.bootstrap_version
           Assets.assets[version][:js].each do |file|
-            output += '<!--[if lt IE 9]>' if file == 'html5.js'
+            html5_flag = file.match(/^html5.*\.js$/)
+            output += '<!--[if lt IE 9]>' if html5_flag
             output += '<script type="text/javascript" src="%s"></script>' % url('/js/%s' % file)
-            output += '<![endif]-->' if file == 'html5.js'
+            output += '<![endif]-->' if html5_flag
           end
           output
         end
