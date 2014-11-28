@@ -1,0 +1,11 @@
+:css:
+- bootstrap.min.css
+- bootstrap-responsive.min.css
+:png:
+- glyphicons-halflings.png
+- glyphicons-halflings-white.png
+:js:
+- jquery.min.js
+- bootstrap.min.js
+- html5.js
+

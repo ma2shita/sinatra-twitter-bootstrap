@@ -7,40 +7,18 @@ module Sinatra
 
       module Assets
 
-        ASSETS = { "2.3.2" =>
-                   { :css => ['bootstrap.min.css', 'bootstrap-responsive.min.css'],
-                     :png => ['glyphicons-halflings.png', 'glyphicons-halflings-white.png'],
-                     :js =>  ['jquery.min.js', 'bootstrap.min.js', 'html5.js'],
-                   },
-                   "3.2.0" =>
-                   { :css => ['bootstrap.min.css', 'bootstrap-theme.min.css'],
-                     :js =>  ['jquery.min.js', 'bootstrap.min.js', 'html5.js'],
-                     :eot => ['glyphicons-halflings-regular.eot'],
-                     :svg => ['glyphicons-halflings-regular.svg'],
-                     :ttf => ['glyphicons-halflings-regular.ttf'],
-                     :woff => ['glyphicons-halflings-regular.woff'],
-                   },
-                   "3.2.0a" =>
-                   { :css => ['bootstrap.min.css', 'bootstrap-theme.min.css'],
-                     :js =>  ['jquery.min.js', 'bootstrap.min.js', 'html5.js'],
-                     :eot => ['glyphicons-halflings-regular.eot'],
-                     :svg => ['glyphicons-halflings-regular.svg'],
-                     :ttf => ['glyphicons-halflings-regular.ttf'],
-                     :woff => ['glyphicons-halflings-regular.woff'],
-                   },
-                   "3.3.1" =>
-                   { :css => ['bootstrap.min.css', 'bootstrap-theme.min.css'],
-                     :js =>  ['jquery-1.11.1.min.js', 'bootstrap.min.js', 'html5shiv.min.js'],
-                     :eot => ['glyphicons-halflings-regular.eot'],
-                     :svg => ['glyphicons-halflings-regular.svg'],
-                     :ttf => ['glyphicons-halflings-regular.ttf'],
-                     :woff => ['glyphicons-halflings-regular.woff'],
-                   },
-                 }
-
+        def self.assets
+          asset_confs = Dir.glob(File.join(File.expand_path(File.dirname(__FILE__)), "assets", "*", "config.yaml"))
+          asset_confs.inject({}) do |h, conf_path|
+            name = conf_path.split(File::Separator)[-2]
+            conf = YAML.load(open(conf_path))
+            h.merge(name => conf)
+          end
+        end
+          
         def self.generate_bootstrap_asset_routes(app)
           version = app.settings.bootstrap_version
-          ASSETS[version].each do |kind, files|
+          assets[version].each do |kind, files|
             files.each do |file|
               kind_route = case kind
                            when :png
@@ -82,7 +60,7 @@ module Sinatra
         def bootstrap_css
           output = '<meta name="viewport" content="width=device-width, initial-scale=1.0">'
           version = Assets.bootstrap_version
-          Assets::ASSETS[version][:css].each do |file|
+          Assets.assets[version][:css].each do |file|
             output += '<link rel="stylesheet" media="screen, projection" type="text/css" href="%s">' % url('/css/%s' % file)
           end
           output
@@ -91,7 +69,7 @@ module Sinatra
         def bootstrap_js
           output = ''
           version = Assets.bootstrap_version
-          Assets::ASSETS[version][:js].each do |file|
+          Assets.assets[version][:js].each do |file|
             output += '<!--[if lt IE 9]>' if file == 'html5.js'
             output += '<script type="text/javascript" src="%s"></script>' % url('/js/%s' % file)
             output += '<![endif]-->' if file == 'html5.js'
