@@ -6,6 +6,7 @@ module Sinatra
     module Bootstrap
 
       module Assets
+        PREFIX = "sinatra-twitter-bootstrap"
         extend self
 
         def assets
@@ -28,9 +29,9 @@ module Sinatra
                              :fonts
                            else
                              kind
-                           end
-              app.get '/%s/%s' % [kind_route.to_s, file], :provides => kind do
-                cache_control :public, :must_revalidate, :max_age => 3600
+                           end.to_s
+              app.get '/%s/%s/%s/%s' % [PREFIX, version, kind_route, file], :provides => kind do
+                cache_control :public, :must_revalidate, :max_age => 1
                 content = File.read(File.join(File.dirname(__FILE__), 'assets', version, file))
                 etag Digest::SHA1.hexdigest(content)
                 content
@@ -62,7 +63,7 @@ module Sinatra
           output = '<meta name="viewport" content="width=device-width, initial-scale=1.0">'
           version = Assets.bootstrap_version
           Assets.assets[version][:css].each do |file|
-            output += '<link rel="stylesheet" media="screen, projection" type="text/css" href="%s">' % url('/css/%s' % file)
+            output += '<link rel="stylesheet" media="screen, projection" type="text/css" href="%s">' % url('/%s/%s/%s/%s' % [Assets::PREFIX, version, "css", file])
           end
           output
         end
@@ -73,7 +74,7 @@ module Sinatra
           Assets.assets[version][:js].each do |file|
             html5_flag = file.match(/^html5.*\.js$/)
             output += '<!--[if lt IE 9]>' if html5_flag
-            output += '<script type="text/javascript" src="%s"></script>' % url('/js/%s' % file)
+            output += '<script type="text/javascript" src="%s"></script>' % url('/%s/%s/%s/%s' % [Assets::PREFIX, version, "js", file])
             output += '<![endif]-->' if html5_flag
           end
           output
